@@ -75,9 +75,8 @@ identity_admin_endpoint = endpoint "identity-admin"
 identity_endpoint = endpoint "identity-api"
 keystone_service_role = node["nova"]["keystone_service_chef_role"]
 keystone = get_settings_by_role keystone_service_role, "keystone"
-glance_api_role = node["nova"]["glance_api_chef_role"]
-glance = get_settings_by_role glance_api_role, "glance"
-glance_api_endpoint = endpoint "image-api"
+glance = get_settings_by_role node["glance"]["glance_api_chef_role"], "glance"
+image_api_endpoint = endpoint "image-api"
 api_endpoint = endpoint "compute-volume"
 
 if glance["api"]["swift_store_auth_address"].nil?
@@ -115,9 +114,9 @@ template "/etc/cinder/cinder.conf" do
     :keystone_service_port => identity_endpoint.port,
     :keystone_admin_port => identity_endpoint.port,
     #:keystone_admin_token => keystone["admin_token"],
-    :glance_api_ipaddress => image_endpoint.host,
-    :glance_service_port => image_endpoint.port,
-    :glance_admin_port => image_endpoint.port,
+    :glance_api_ipaddress => image_api_endpoint.host,
+    :glance_service_port => image_api_endpoint.port,
+    :glance_admin_port => image_api_endpoint.port,
     #:glance_admin_token => glance["admin_token"],
     :service_tenant_name => node["openstack"]["cinder"]["service_tenant_name"],
     :service_user => node["openstack"]["cinder"]["service_user"],
