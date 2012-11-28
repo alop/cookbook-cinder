@@ -23,39 +23,39 @@
 default["developer_mode"] = false  # we want secure passwords by default
 ########################################################################
 
-default["openstack"]["cinder"]["services"]["volume"]["scheme"] = "http"
-default["openstack"]["cinder"]["services"]["volume"]["network"] = "public"
-default["openstack"]["cinder"]["services"]["volume"]["port"] = 8776
-default["openstack"]["cinder"]["services"]["volume"]["path"] = "/v1"
+default["cinder"]["services"]["volume"]["scheme"] = "http"
+default["cinder"]["services"]["volume"]["network"] = "public"
+default["cinder"]["services"]["volume"]["port"] = 8776
+default["cinder"]["services"]["volume"]["path"] = "/v1"
 
 default["cinder"]["services"]["volume"]["scheme"] = "http"
 default["cinder"]["services"]["volume"]["network"] = "public"
 default["cinder"]["services"]["volume"]["port"] = 8776
 default["cinder"]["services"]["volume"]["path"] = "/v1"
 
-default["openstack"]["cinder"]["db"]["name"] = "cinder"
-default["openstack"]["cinder"]["db"]["username"] = "cinder"
+default["cinder"]["db"]["name"] = "cinder"
+default["cinder"]["db"]["username"] = "cinder"
 
 # TODO: These may need to be glance-registry specific.. and looked up by glance-api
-default["openstack"]["cinder"]["service_tenant_name"] = "service"
-default["openstack"]["cinder"]["service_user"] = "cinder"
-default["openstack"]["cinder"]["service_role"] = "admin"
+default["cinder"]["service_tenant_name"] = "service"
+default["cinder"]["service_user"] = "cinder"
+default["cinder"]["service_role"] = "admin"
 
 # logging attribute
-default["openstack"]["cinder"]["syslog"]["use"] = false
-default["openstack"]["cinder"]["syslog"]["facility"] = "LOG_LOCAL2"
-default["openstack"]["cinder"]["syslog"]["config_facility"] = "local2"
+default["cinder"]["syslog"]["use"] = false
+default["cinder"]["syslog"]["facility"] = "LOG_LOCAL2"
+default["cinder"]["syslog"]["config_facility"] = "local2"
 
 # platform-specific settings
 case platform
 when "fedora", "redhat", "centos"
-  default["openstack"]["cinder"]["platform"] = {
+  default["cinder"]["platform"] = {
     "mysql_python_packages" => [ "MySQL-python" ],
     "cinder_packages" => [ "openstack-cinder", "openstack-swift" ],
     "package_overrides" => ""
   }
 when "ubuntu"
-  default["openstack"]["cinder"]["platform"] = {
+  default["cinder"]["platform"] = {
     "mysql_python_packages" => [ "python-mysqldb" ],
     "cinder_packages" => [ "cinder-scheduler", "python-swift", "python-keystoneclient", "cinder-volume", "cinder-api" ],
     "package_overrides" => "-o Dpkg::Options::='--force-confold' -o Dpkg::Options::='--force-confdef'",
