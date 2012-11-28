@@ -2,6 +2,7 @@
 # Cookbook Name:: cinder
 # Recipe:: server
 #
+# Copyright 2012, AT&T
 # Copyright 2012, DreamHost
 # Copyright 2012, Rackspace US, Inc.
 # Copyright 2012, Opscode, Inc.

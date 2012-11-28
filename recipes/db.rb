@@ -37,7 +37,8 @@ else
   node.set_unless["openstack"]["cinder"]["db"]["password"] = secure_password
 end
 
-db_create_with_user("image",
+db_create_with_user("cinder",
+  node["openstack"]["cinder"]["db"]["name"],
   node["openstack"]["cinder"]["db"]["username"],
   node["openstack"]["cinder"]["db"]["password"]
 )
