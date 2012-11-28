@@ -71,8 +71,8 @@ sql_connection = db_uri("cinder", db_user, db_pass)
 rabbit_server_role = node["nova"]["rabbit_server_chef_role"]
 rabbit_info = get_settings_by_role rabbit_server_role, "queue"
 
-ks_admin_endpoint = endpoint "identity-admin"
-ks_service_endpoint = endpoint "identity-api"
+identity_admin_endpoint = endpoint "identity-admin"
+identity_endpoint = endpoint "identity-api"
 keystone_service_role = node["nova"]["keystone_service_chef_role"]
 keystone = get_settings_by_role keystone_service_role, "keystone"
 glance_api_role = node["nova"]["glance_api_chef_role"]
