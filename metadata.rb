@@ -9,6 +9,8 @@ version          "5.0.1"
   supports os
 end
 
-%w{ database mysql openstack-utils openstack-common }.each do |dep|
-  depends dep
-end
+depends           "database"
+depends           "mysql"
+depends           "openstack-utils"
+depends           "openstack-common"
+depends           "osops-utils"

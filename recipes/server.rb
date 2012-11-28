@@ -26,12 +26,12 @@ end
 
 # Allow for using a well known service password
 if node["developer_mode"]
-  node.set_unless["openstack"]["cinder"]["service_pass"] = "cinder"
+  node.set_unless["cinder"]["service_pass"] = "cinder"
 else
-  node.set_unless["openstack"]["cinder"]["service_pass"] = secure_password
+  node.set_unless["cinder"]["service_pass"] = secure_password
 end
 
-platform_options = node["openstack"]["cinder"]["platform"]
+platform_options = node["cinder"]["platform"]
 
 platform_options["cinder_packages"].each do |pkg|
   package pkg do
@@ -65,18 +65,18 @@ directory "/etc/cinder" do
 end
 
 
-db_user = node['openstack']['cinder']['db']['username']
-db_pass = node['openstack']['cinder']['db']['password']
+db_user = node['cinder']['db']['username']
+db_pass = node['cinder']['db']['password']
 sql_connection = db_uri("cinder", db_user, db_pass)
 
-rabbit_server_role = node["nova"]["rabbit_server_chef_role"]
-rabbit_info = get_settings_by_role rabbit_server_role, "queue"
+rabbit_server_role = node["cinder"]["rabbit_server_chef_role"]
+rabbit_info = config_by_role rabbit_server_role, "queue"
 
 identity_admin_endpoint = endpoint "identity-admin"
 identity_endpoint = endpoint "identity-api"
-keystone_service_role = node["nova"]["keystone_service_chef_role"]
-keystone = get_settings_by_role keystone_service_role, "keystone"
-glance = get_settings_by_role node["glance"]["glance_api_chef_role"], "glance"
+keystone_service_role = node["cinder"]["keystone_service_chef_role"]
+keystone = config_by_role keystone_service_role, "keystone"
+glance = config_by_role node["glance"]["glance_api_chef_role"], "glance"
 image_api_endpoint = endpoint "image-api"
 api_endpoint = endpoint "compute-volume"
 
@@ -99,8 +99,8 @@ template "/etc/cinder/cinder.conf" do
   mode "0644"
   variables(
     :sql_connection => sql_connection,
-    :use_syslog => node["openstack"]["cinder"]["syslog"]["use"],
-    :log_facility => node["openstack"]["cinder"]["syslog"]["facility"],
+    :use_syslog => node["cinder"]["syslog"]["use"],
+    :log_facility => node["cinder"]["syslog"]["facility"],
     :rabbit_ipaddress => rabbit_info["host"],
     :rabbit_port => rabbit_info["port"],
     :default_store => glance["api"]["default_store"],
@@ -114,14 +114,14 @@ template "/etc/cinder/cinder.conf" do
     :keystone_api_ipaddress => identity_endpoint.host,
     :keystone_service_port => identity_endpoint.port,
     :keystone_admin_port => identity_endpoint.port,
-    #:keystone_admin_token => keystone["admin_token"],
+    :keystone_admin_token => keystone["admin_token"],
     :glance_api_ipaddress => image_api_endpoint.host,
     :glance_service_port => image_api_endpoint.port,
     :glance_admin_port => image_api_endpoint.port,
-    #:glance_admin_token => glance["admin_token"],
-    :service_tenant_name => node["openstack"]["cinder"]["service_tenant_name"],
-    :service_user => node["openstack"]["cinder"]["service_user"],
-    :service_pass => node["openstack"]["cinder"]["service_pass"]
+    :glance_admin_token => glance["admin_token"],
+    :service_tenant_name => node["cinder"]["service_tenant_name"],
+    :service_user => node["cinder"]["service_user"],
+    :service_pass => node["cinder"]["service_pass"]
     )
   notifies :restart, resources(:service => "cinder-api"), :immediately
   notifies :restart, resources(:service => "cinder-scheduler"), :immediately
@@ -140,15 +140,15 @@ template "/etc/cinder/api-paste.ini" do
   group "root"
   mode "0644"
   variables(
-    "use_syslog" => node["openstack"]["cinder"]["syslog"]["use"],
-    "log_facility" => node["openstack"]["cinder"]["syslog"]["facility"],
+    "use_syslog" => node["cinder"]["syslog"]["use"],
+    "log_facility" => node["cinder"]["syslog"]["facility"],
     "keystone_api_ipaddress" => identity_endpoint.host,
     "keystone_service_port" => identity_endpoint.port,
     "keystone_admin_port" => identity_endpoint.port,
-    #"keystone_admin_token" => keystone["admin_token"],
-    "service_tenant_name" => node["openstack"]["cinder"]["service_tenant_name"],
-    "service_user" => node["openstack"]["cinder"]["service_user"],
-    "service_pass" => node["openstack"]["cinder"]["service_pass"]
+    "keystone_admin_token" => keystone["admin_token"],
+    "service_tenant_name" => node["cinder"]["service_tenant_name"],
+    "service_user" => node["cinder"]["service_user"],
+    "service_pass" => node["cinder"]["service_pass"]
     )
   notifies :restart, resources(:service => "cinder-api"), :immediately
   notifies :restart, resources(:service => "cinder-scheduler"), :immediately
