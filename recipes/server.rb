@@ -172,7 +172,7 @@ keystone_register "Register Cinder Volume Service" do
 end
 keystone_register "Register Cinder Volume Endpoint" do
   auth_host identity_admin_endpoint.host
-  auth_port identity_admin_endpoint.port
+  auth_port identity_admin_endpoint.port.to_s
   auth_protocol identity_admin_endpoint.scheme
   api_ver identity_admin_endpoint.path
   auth_token keystone["admin_token"]
