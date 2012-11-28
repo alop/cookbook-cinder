@@ -81,8 +81,8 @@ glance_api_endpoint = endpoint "image-api"
 api_endpoint = endpoint "compute-volume"
 
 if glance["api"]["swift_store_auth_address"].nil?
-  swift_store_auth_address="http://#{ks_admin_endpoint["host"]}:#{ks_service_endpoint["port"]}/v2.0"
-  swift_store_user="#{glance["service_tenant_name"]}:#{glance["service_user"]}"
+  swift_store_auth_address="http://#{identity_endpoint.host}:#{identity_endpoint.port}/v2.0"
+  swift_store_user="#{image_endpoint.service_tenant_name}:#{image_endpoint.service_user}"
   swift_store_key=glance["service_pass"]
   swift_store_auth_version=2
 else
