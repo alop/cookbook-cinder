@@ -23,16 +23,6 @@
 default["developer_mode"] = false  # we want secure passwords by default
 ########################################################################
 
-default["cinder"]["services"]["volume"]["scheme"] = "http"
-default["cinder"]["services"]["volume"]["network"] = "public"
-default["cinder"]["services"]["volume"]["port"] = 8776
-default["cinder"]["services"]["volume"]["path"] = "/v1"
-
-default["cinder"]["services"]["volume"]["scheme"] = "http"
-default["cinder"]["services"]["volume"]["network"] = "public"
-default["cinder"]["services"]["volume"]["port"] = 8776
-default["cinder"]["services"]["volume"]["path"] = "/v1"
-
 default["cinder"]["db"]["name"] = "cinder"
 default["cinder"]["db"]["username"] = "cinder"
 
